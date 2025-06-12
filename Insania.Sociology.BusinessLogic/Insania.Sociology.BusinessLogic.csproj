@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Insania.Shared.Models" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Insania.Sociology.Contracts\Insania.Sociology.Contracts.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.DataAccess\Insania.Sociology.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

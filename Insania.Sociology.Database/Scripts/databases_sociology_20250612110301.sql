@@ -1,0 +1,1 @@
+﻿create database insania_sociology;

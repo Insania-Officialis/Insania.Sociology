@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Insania.Shared.Messages" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Insania.Sociology.Contracts\Insania.Sociology.Contracts.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Database\Insania.Sociology.Database.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Entities\Insania.Sociology.Entities.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Messages\Insania.Sociology.Messages.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Models\Insania.Sociology.Models.csproj" />
+  </ItemGroup>
+
+</Project>

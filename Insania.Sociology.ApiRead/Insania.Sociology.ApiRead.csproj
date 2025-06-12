@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>82f049b3-7f53-4fdc-bd99-472f738aeb0e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Insania.Shared.Contracts" Version="1.0.3" />
+    <PackageReference Include="Insania.Shared.Middleware" Version="1.0.0" />
+    <PackageReference Include="Insania.Shared.Services" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.6.24" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Insania.Sociology.BusinessLogic\Insania.Sociology.BusinessLogic.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Contracts\Insania.Sociology.Contracts.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Database\Insania.Sociology.Database.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Messages\Insania.Sociology.Messages.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Middleware\Insania.Sociology.Middleware.csproj" />
+    <ProjectReference Include="..\Insania.Sociology.Models\Insania.Sociology.Models.csproj" />
+  </ItemGroup>
+
+</Project>
