@@ -80,19 +80,19 @@ services
 //Внедрение зависимостей сервисов
 services.AddSingleton(_ => configuration); //конфигурация
 services.AddScoped<ITransliterationSL, TransliterationSL>(); //сервис транслитерации
-services.AddSociologyBL(); //сервисы работы с бизнес-логикой в зоне политики
+services.AddSociologyBL(); //сервисы работы с бизнес-логикой в зоне социологии
 
 //Добавление контекстов бд в коллекцию сервисов
 services.AddDbContext<SociologyContext>(options =>
 {
     string connectionString = configuration.GetConnectionString("Sociology") ?? throw new Exception(ErrorMessages.EmptyConnectionString);
     options.UseNpgsql(connectionString);
-}); //бд политики
+}); //бд социологии
 services.AddDbContext<LogsApiSociologyContext>(options =>
 {
     string connectionString = configuration.GetConnectionString("LogsApiSociology") ?? throw new Exception(ErrorMessages.EmptyConnectionString);
     options.UseNpgsql(connectionString);
-}); //бд логов api в зоне политики
+}); //бд логов api в зоне социологии
 
 //Установка игнорирования типов даты и времени
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
