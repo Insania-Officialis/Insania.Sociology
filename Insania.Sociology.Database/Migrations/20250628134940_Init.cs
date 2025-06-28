@@ -16,7 +16,7 @@ namespace Insania.Sociology.Database.Migrations
                 name: "insania_sociology");
 
             migrationBuilder.CreateTable(
-                name: "d_factions",
+                name: "c_factions",
                 schema: "insania_sociology",
                 columns: table => new
                 {
@@ -33,8 +33,8 @@ namespace Insania.Sociology.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_d_factions", x => x.id);
-                    table.UniqueConstraint("AK_d_factions_alias", x => x.alias);
+                    table.PrimaryKey("PK_c_factions", x => x.id);
+                    table.UniqueConstraint("AK_c_factions_alias", x => x.alias);
                 },
                 comment: "Фракции");
         }
@@ -43,7 +43,7 @@ namespace Insania.Sociology.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "d_factions",
+                name: "c_factions",
                 schema: "insania_sociology");
         }
     }

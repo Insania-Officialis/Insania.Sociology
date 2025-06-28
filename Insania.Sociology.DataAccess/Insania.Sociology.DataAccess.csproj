@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Insania.Shared.Messages" Version="1.0.3" />
+    <PackageReference Include="Insania.Shared.Messages" Version="1.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
   </ItemGroup>
 

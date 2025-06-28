@@ -10,7 +10,7 @@ namespace Insania.Sociology.Entities;
 /// <summary>
 /// Модель сущности фракция
 /// </summary>
-[Table("d_factions")]
+[Table("c_factions")]
 [Comment("Фракции")]
 public class Faction : Compendium
 {

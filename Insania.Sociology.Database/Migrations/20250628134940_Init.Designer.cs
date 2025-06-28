@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Insania.Sociology.Database.Migrations.LogsApiSociology
+namespace Insania.Sociology.Database.Migrations
 {
-    [DbContext(typeof(LogsApiSociologyContext))]
-    [Migration("20250612084357_Init")]
+    [DbContext(typeof(SociologyContext))]
+    [Migration("20250628134940_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,13 +20,13 @@ namespace Insania.Sociology.Database.Migrations.LogsApiSociology
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("insania_logs_api_sociology")
+                .HasDefaultSchema("insania_sociology")
                 .HasAnnotation("ProductVersion", "9.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Insania.Sociology.Entities.LogApiSociology", b =>
+            modelBuilder.Entity("Insania.Sociology.Entities.Faction", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,15 +36,11 @@ namespace Insania.Sociology.Database.Migrations.LogsApiSociology
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("DataIn")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("data_in")
-                        .HasComment("Данные на вход");
-
-                    b.Property<string>("DataOut")
-                        .HasColumnType("jsonb")
-                        .HasColumnName("data_out")
-                        .HasComment("Данные на выход");
+                    b.Property<string>("Alias")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("alias")
+                        .HasComment("Псевдоним");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp without time zone")
@@ -56,42 +52,22 @@ namespace Insania.Sociology.Database.Migrations.LogsApiSociology
                         .HasColumnName("date_deleted")
                         .HasComment("Дата удаления");
 
-                    b.Property<DateTime?>("DateEnd")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("date_end")
-                        .HasComment("Дата окончания");
-
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("date_start")
-                        .HasComment("Дата начала");
-
                     b.Property<DateTime>("DateUpdate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_update")
                         .HasComment("Дата обновления");
 
-                    b.Property<bool>("IsSystem")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_system")
-                        .HasComment("Признак системной записи");
-
-                    b.Property<string>("Method")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("method")
-                        .HasComment("Наименование вызываемого метода");
+                        .HasColumnName("description")
+                        .HasComment("Описание");
 
-                    b.Property<bool>("Success")
-                        .HasColumnType("boolean")
-                        .HasColumnName("success")
-                        .HasComment("Признак успешного выполнения");
-
-                    b.Property<string>("Type")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("type")
-                        .HasComment("Тип вызываемого метода");
+                        .HasColumnName("name")
+                        .HasComment("Наименование");
 
                     b.Property<string>("UsernameCreate")
                         .IsRequired()
@@ -107,17 +83,11 @@ namespace Insania.Sociology.Database.Migrations.LogsApiSociology
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DataIn");
+                    b.HasAlternateKey("Alias");
 
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("DataIn"), "gin");
-
-                    b.HasIndex("DataOut");
-
-                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("DataOut"), "gin");
-
-                    b.ToTable("r_logs_api_sociology", "insania_logs_api_sociology", t =>
+                    b.ToTable("c_factions", "insania_sociology", t =>
                         {
-                            t.HasComment("Логи сервиса социологии");
+                            t.HasComment("Фракции");
                         });
                 });
 #pragma warning restore 612, 618

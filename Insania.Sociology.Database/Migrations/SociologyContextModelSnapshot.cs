@@ -82,7 +82,7 @@ namespace Insania.Sociology.Database.Migrations
 
                     b.HasAlternateKey("Alias");
 
-                    b.ToTable("d_factions", "insania_sociology", t =>
+                    b.ToTable("c_factions", "insania_sociology", t =>
                         {
                             t.HasComment("Фракции");
                         });
