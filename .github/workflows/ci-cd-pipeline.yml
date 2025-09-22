@@ -1,0 +1,351 @@
+#Название рабочего процесса
+name: CI/CD Pipeline
+
+#Триггеры запуска сборки:
+on:
+  #При пуше в ветку
+  push:    
+    #Список веток
+    branches: [ main ]
+
+#Определение заданий
+jobs:
+  #Задание для сборки на linux
+  build-linux:
+    runs-on: insania-linux-server
+
+    #Шаги выполнения задания
+    steps:
+    #Обновление кода
+    - name: Update code
+      run: |
+        cd /app
+        cd Insania.Sociology
+        git pull
+      shell: bash
+
+    #Остановка 1 контейнера чтения
+    - name: Stop 1 read container
+      run: |
+        cd /app
+        docker-compose stop insania_sociology_api_read_1
+      shell: bash
+
+    #Сборка 1 контейнера чтения
+    - name: Build 1 read container
+      run: |
+        cd /app
+        docker-compose build insania_sociology_api_read_1
+      shell: bash
+
+    #Запуск 1 контейнера чтения
+    - name: Start 1 read container
+      run: |
+        cd /app
+        docker-compose up -d insania_sociology_api_read_1
+      shell: bash
+
+    #Проверка статуса 1 контейнера чтения
+    - name: Verify 1 read container status
+      run: |
+        cd /app
+        sleep 10
+        status=$(docker-compose ps insania_sociology_api_read_1)
+        echo "Container status: $status"
+        
+        if echo "$status" | grep -q "Up"; then
+          echo "✅ Container is running successfully!"
+          docker-compose ps
+        else
+          echo "❌ Container failed to start"
+          docker-compose logs insania_sociology_api_read_1 --tail=20
+          exit 1
+        fi
+      shell: bash
+
+    #Остановка 2 контейнера чтения
+    - name: Stop 2 read container
+      run: |
+        cd /app
+        docker-compose stop insania_sociology_api_read_2
+      shell: bash
+
+    #Сборка 2 контейнера чтения
+    - name: Build 2 read container
+      run: |
+        cd /app
+        docker-compose build insania_sociology_api_read_2
+      shell: bash
+
+    #Запуск 2 контейнера чтения
+    - name: Start 2 read container
+      run: |
+        cd /app
+        docker-compose up -d insania_sociology_api_read_2
+      shell: bash
+
+    #Проверка статуса 2 контейнера чтения
+    - name: Verify 2 read container status
+      run: |
+        cd /app
+        sleep 10
+        status=$(docker-compose ps insania_sociology_api_read_2)
+        echo "Container status: $status"
+        
+        if echo "$status" | grep -q "Up"; then
+          echo "✅ Container is running successfully!"
+          docker-compose ps
+        else
+          echo "❌ Container failed to start"
+          docker-compose logs insania_sociology_api_read_2 --tail=20
+          exit 1
+        fi
+      shell: bash
+
+    #Остановка 1 контейнера записи
+    #- name: Stop 1 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose stop insania_sociology_api_commit_1
+    #  shell: bash
+
+    #Сборка 1 контейнера записи
+    #- name: Build 1 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose build insania_sociology_api_commit_1
+    #  shell: bash
+
+    #Запуск 1 контейнера записи
+    #- name: Start 1 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose up -d insania_sociology_api_commit_1
+    #  shell: bash
+
+    #Проверка статуса 1 контейнера записи
+    #- name: Verify 1 commit container status
+    #  run: |
+    #    cd /app
+    #    sleep 10
+    #    status=$(docker-compose ps insania_sociology_api_commit_1)
+    #    echo "Container status: $status"
+    #    
+    #    if echo "$status" | grep -q "Up"; then
+    #      echo "✅ Container is running successfully!"
+    #      docker-compose ps
+    #    else
+    #      echo "❌ Container failed to start"
+    #      docker-compose logs insania_sociology_api_commit_1 --tail=20
+    #      exit 1
+    #    fi
+    #  shell: bash
+
+    #Остановка 2 контейнера записи
+    #- name: Stop 2 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose stop insania_sociology_api_commit_2
+    #  shell: bash
+
+    #Сборка 2 контейнера записи
+    #- name: Build 2 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose build insania_sociology_api_commit_2
+    #  shell: bash
+
+    #Запуск 2 контейнера записи
+    #- name: Start 2 commit container
+    #  run: |
+    #    cd /app
+    #    docker-compose up -d insania_sociology_api_commit_2
+    #  shell: bash
+
+    #Проверка статуса 2 контейнера записи
+    #- name: Verify 2 commit container status
+    #  run: |
+    #    cd /app
+    #    sleep 10
+    #    status=$(docker-compose ps insania_sociology_api_commit_2)
+    #    echo "Container status: $status"
+    #    
+    #    if echo "$status" | grep -q "Up"; then
+    #      echo "✅ Container is running successfully!"
+    #      docker-compose ps
+    #    else
+    #      echo "❌ Container failed to start"
+    #      docker-compose logs insania_sociology_api_commit_2 --tail=20
+    #      exit 1
+    #    fi
+    #  shell: bash
+
+  #Задание для сборки на windows
+  build-windows:
+    runs-on: insania-windows-server
+
+    #Шаги выполнения задания
+    steps:
+    #Обновление кода
+    - name: Update code
+      run: |
+        cd C:\Insania
+        cd Insania.Sociology
+        git pull
+      shell: powershell
+
+    #Остановка 1 контейнера чтения
+    - name: Stop 1 read container
+      run: |
+        cd C:\Insania
+        docker-compose stop insania_sociology_api_read_1
+      shell: powershell
+
+    #Сборка 1 контейнера чтения
+    - name: Build 1 read container
+      run: |
+        cd C:\Insania
+        docker-compose build insania_sociology_api_read_1
+      shell: powershell
+
+    #Запуск 1 контейнера чтения
+    - name: Start 1 read container
+      run: |
+        cd C:\Insania
+        docker-compose up -d insania_sociology_api_read_1
+      shell: powershell
+
+    #Проверка статуса 1 контейнера чтения
+    - name: Verify 1 read container status
+      run: |
+        cd C:\Insania
+        Start-Sleep -Seconds 10
+        $status = docker-compose ps insania_sociology_api_read_1
+        Write-Host "Container status: $status"
+        
+        if ($status -like "*Up*") {
+          Write-Host "✅ Container is running successfully!"
+          docker-compose ps
+        } else {
+          Write-Host "❌ Container failed to start"
+          docker-compose logs insania_sociology_api_read_1 --tail=20
+          exit 1
+        }
+      shell: powershell
+
+    #Остановка 2 контейнера чтения
+    - name: Stop 2 read container
+      run: |
+        cd C:\Insania
+        docker-compose stop insania_sociology_api_read_2
+      shell: powershell
+
+    #Сборка 2 контейнера чтения
+    - name: Build 2 read container
+      run: |
+        cd C:\Insania
+        docker-compose build insania_sociology_api_read_2
+      shell: powershell
+
+    #Запуск 2 контейнера чтения
+    - name: Start 2 read container
+      run: |
+        cd C:\Insania
+        docker-compose up -d insania_sociology_api_read_2
+      shell: powershell
+
+    #Проверка статуса 2 контейнера чтения
+    - name: Verify 2 read container status
+      run: |
+        cd C:\Insania
+        Start-Sleep -Seconds 10
+        $status = docker-compose ps insania_sociology_api_read_2
+        Write-Host "Container status: $status"
+        
+        if ($status -like "*Up*") {
+          Write-Host "✅ Container is running successfully!"
+          docker-compose ps
+        } else {
+          Write-Host "❌ Container failed to start"
+          docker-compose logs insania_sociology_api_read_2 --tail=20
+          exit 1
+        }
+      shell: powershell
+
+    #Остановка 1 контейнера записи
+    #- name: Stop 1 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose stop insania_sociology_api_commit_1
+    #  shell: powershell
+
+    #Сборка 1 контейнера записи
+    #- name: Build 1 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose build insania_sociology_api_commit_1
+    #  shell: powershell
+
+    #Запуск 1 контейнера записи
+    #- name: Start 1 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose up -d insania_sociology_api_commit_1
+    #  shell: powershell
+
+    #Проверка статуса 1 контейнера записи
+    #- name: Verify 1 commit container status
+    #  run: |
+    #    cd C:\Insania
+    #    Start-Sleep -Seconds 10
+    #    $status = docker-compose ps insania_sociology_api_commit_1
+    #    Write-Host "Container status: $status"
+    #    
+    #    if ($status -like "*Up*") {
+    #      Write-Host "✅ Container is running successfully!"
+    #      docker-compose ps
+    #    } else {
+    #      Write-Host "❌ Container failed to start"
+    #      docker-compose logs insania_sociology_api_commit_1 --tail=20
+    #      exit 1
+    #    }
+    #  shell: powershell
+
+    #Остановка 2 контейнера записи
+    #- name: Stop 2 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose stop insania_sociology_api_commit_2
+    #  shell: powershell
+
+    #Сборка 2 контейнера записи
+    #- name: Build 2 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose build insania_sociology_api_commit_2
+    #  shell: powershell
+
+    #Запуск 2 контейнера записи
+    #- name: Start 2 commit container
+    #  run: |
+    #    cd C:\Insania
+    #    docker-compose up -d insania_sociology_api_commit_2
+    #  shell: powershell
+
+    #Проверка статуса 2 контейнера записи
+    #- name: Verify 2 commit container status
+    #  run: |
+    #    cd C:\Insania
+    #    Start-Sleep -Seconds 10
+    #    $status = docker-compose ps insania_sociology_api_commit_2
+    #    Write-Host "Container status: $status"
+    #    
+    #    if ($status -like "*Up*") {
+    #      Write-Host "✅ Container is running successfully!"
+    #      docker-compose ps
+    #    } else {
+    #      Write-Host "❌ Container failed to start"
+    #      docker-compose logs insania_sociology_api_commit_2 --tail=20
+    #      exit 1
+    #    }
+    #  shell: powershell

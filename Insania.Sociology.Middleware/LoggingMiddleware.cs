@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+
 using Newtonsoft.Json;
 
 using Insania.Shared.Models.Requests.Logs;
@@ -23,7 +24,7 @@ public class LoggingMiddleware(RequestDelegate next)
     /// <summary>
     /// Успешные статусы
     /// </summary>
-    private readonly static List<string> _successCodes = ["200", "204"];
+    private readonly static List<int> _successCodes = [200, 204];
 
     /// <summary>
     /// Исключения, которым не нужно фиксировать тело запроса и ответа
@@ -49,9 +50,6 @@ public class LoggingMiddleware(RequestDelegate next)
         contextDB.Logs.Add(log);
         await contextDB.SaveChangesAsync();
 
-        //Определение успешности ответа
-        var success = _successCodes.Any(x => x == context.Response.StatusCode.ToString());
-
         //Объявление переменной ответа
         string? response = null;
 
@@ -67,8 +65,14 @@ public class LoggingMiddleware(RequestDelegate next)
             await _next(context);
             response = await GetResponse(context.Response);
 
+            //Получение кода статуса
+            var statusCode = context.Response.StatusCode;
+
+            //Определение успешности ответа
+            var success = _successCodes.Any(x => x == statusCode);
+
             //Запись результата выполнения в лог
-            log.SetEnd(success, response);
+            log.SetEnd(success, response, statusCode);
             contextDB.Logs.Update(log);
             await contextDB.SaveChangesAsync();
 
@@ -80,8 +84,14 @@ public class LoggingMiddleware(RequestDelegate next)
             //Переход к следующему элементу
             await _next(context);
 
+            //Получение кода статуса
+            var statusCode = context.Response.StatusCode;
+
+            //Определение успешности ответа
+            var success = _successCodes.Any(x => x == statusCode);
+
             //Запись результата выполнения в лог
-            log.SetEnd(success, response);
+            log.SetEnd(success, response, statusCode);
             contextDB.Logs.Update(log);
             await contextDB.SaveChangesAsync();
         }
@@ -109,19 +119,30 @@ public class LoggingMiddleware(RequestDelegate next)
             var reader = new StreamReader(request.Body);
             var bodyString = await reader.ReadToEndAsync();
 
-            //Снова устанавливаем поток в начало
+            //Установка потока в начало
             request.Body.Position = 0;
 
             //Создание модели запроса
-            LogRequest logRequest = new(request.Headers.FirstOrDefault(x => x.Key == "authentication").Value, request.QueryString.ToString(), bodyString);
+            var logRequest = new
+            {
+                Token = request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value.ToString(),
+                QueryParams = request.QueryString.ToString(),
+                Body = string.IsNullOrEmpty(bodyString) ? null : IsJsonRequest(request) ? JsonConvert.DeserializeObject(bodyString) : bodyString
+            };
+
+            //Настройки сериализации для избежания экранирования
+            var settings = new JsonSerializerSettings
+            {
+                StringEscapeHandling = StringEscapeHandling.EscapeHtml
+            };
 
             //Возврат результата
-            return JsonConvert.SerializeObject(logRequest);
+            return JsonConvert.SerializeObject(logRequest, settings);
         }
         else
         {
             //Создание модели запроса
-            LogRequest logRequest = new(request.Headers.FirstOrDefault(x => x.Key == "authentication").Value, request.QueryString.ToString(), null);
+            LogRequest logRequest = new(request.Headers.FirstOrDefault(x => x.Key == "Authorization").Value, request.QueryString.ToString(), null);
 
             //Возврат результата
             return JsonConvert.SerializeObject(logRequest);
@@ -131,7 +152,7 @@ public class LoggingMiddleware(RequestDelegate next)
     /// <summary>
     /// Метод получения ответа
     /// </summary>
-    /// <param name="response">Ответ</param>
+    /// <param cref="HttpResponse" name="response">Ответ</param>
     /// <returns cref="string">Строка ответа</returns>
     private static async Task<string> GetResponse(HttpResponse response)
     {
@@ -144,8 +165,34 @@ public class LoggingMiddleware(RequestDelegate next)
         //Установка потока в начало
         response.Body.Seek(0, SeekOrigin.Begin);
 
-        //Возврат результата
-        return JsonConvert.SerializeObject(bodyString);
+        //Возврат самого тела для json
+        if (IsJsonResponse(response)) return bodyString;
+        //Сериализация в json в ином случае
+        else return JsonConvert.SerializeObject(bodyString);
+    }
+
+    /// <summary>
+    /// Метод проверки, является ли ответ JSON
+    /// </summary>
+    /// <param cref="HttpResponse" name="response">Ответ</param>
+    /// <returns cref="bool">True если JSON</returns>
+    private static bool IsJsonResponse(HttpResponse response)
+    {
+        return response.ContentType?.Contains("application/json") == true ||
+               response.ContentType?.Contains("text/json") == true ||
+               response.ContentType?.Contains("+json") == true;
+    }
+
+    /// <summary>
+    /// Метод проверки, является ли запрос JSON
+    /// </summary>
+    /// <param cref="HttpRequest" name="request">Запрос</param>
+    /// <returns cref="bool">True если JSON</returns>
+    private static bool IsJsonRequest(HttpRequest request)
+    {
+        return request.ContentType?.Contains("application/json") == true ||
+               request.ContentType?.Contains("text/json") == true ||
+               request.ContentType?.Contains("+json") == true;
     }
     #endregion
 }
