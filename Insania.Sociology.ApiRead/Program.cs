@@ -156,7 +156,7 @@ services
     });
 
 //Добавление параметров преобразования моделей
-services.AddAutoMapper(typeof(SociologyMappingProfile));
+services.AddAutoMapper(cfg => { cfg.AddProfile<SociologyMappingProfile>(); });
 
 //Регистрация списка исключений авторизации
 builder.Services.AddSingleton<List<string>>(

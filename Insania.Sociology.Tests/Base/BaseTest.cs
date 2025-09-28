@@ -69,7 +69,7 @@ public abstract class BaseTest
         services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(Log.Logger, dispose: true));
 
         //Добавление параметров преобразования моделей
-        services.AddAutoMapper(typeof(SociologyMappingProfile));
+        services.AddAutoMapper(cfg => { cfg.AddProfile<SociologyMappingProfile>(); });
 
         //Добавление параметров инициализации данных
         IConfigurationSection? initializationDataSettings = configuration.GetSection("InitializationDataSettings");
