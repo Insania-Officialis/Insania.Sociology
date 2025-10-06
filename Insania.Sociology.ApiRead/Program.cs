@@ -17,9 +17,11 @@ using Insania.Shared.Messages;
 using Insania.Shared.Services;
 
 using Insania.Sociology.BusinessLogic;
+using Insania.Sociology.Contracts.Services;
 using Insania.Sociology.Database.Contexts;
 using Insania.Sociology.Middleware;
 using Insania.Sociology.Models.Mapper;
+using Insania.Sociology.Services;
 
 //Создания экземпляра постройки веб-приложения
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -80,6 +82,9 @@ services
 //Внедрение зависимостей сервисов
 services.AddSingleton(_ => configuration); //конфигурация
 services.AddScoped<ITransliterationSL, TransliterationSL>(); //сервис транслитерации
+services.AddSingleton<LoggingSL>(); //сервис логгирование в бд
+services.AddSingleton<ILoggingSL>(provider => provider.GetRequiredService<LoggingSL>()); //подключение сервиса для использования другими сервисами
+services.AddHostedService(provider => provider.GetRequiredService<LoggingSL>()); //подключение сервиса для работы фоном
 services.AddSociologyBL(); //сервисы работы с бизнес-логикой в зоне социологии
 
 //Добавление контекстов бд в коллекцию сервисов

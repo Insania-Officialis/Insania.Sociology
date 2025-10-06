@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Insania.Sociology.Contracts\Insania.Sociology.Contracts.csproj" />
     <ProjectReference Include="..\Insania.Sociology.DataAccess\Insania.Sociology.DataAccess.csproj" />
-    <ProjectReference Include="..\Insania.Sociology.Database\Insania.Sociology.Database.csproj" />
   </ItemGroup>
 
 </Project>
